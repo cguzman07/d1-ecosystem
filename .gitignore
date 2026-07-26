@@ -43,3 +43,6 @@ prisma/*.db-journal
 
 # minio local data
 /minio-data
+
+# Netlify
+.netlify

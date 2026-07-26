@@ -172,3 +172,15 @@ Si ya tienes `npm run dev` activo, Playwright reutiliza el servidor (`reuseExist
 ## SAP
 
 SAP permanece externo. Las órdenes tienen `sapReference` y existe `createOrderFromSap()` en `src/features/orders/service.ts` como punto limpio de integración futura (webhook/inbound).
+
+## GitHub y despliegue (Netlify)
+
+1. El repositorio remoto es el origen de verdad del código (sin `.env`).
+2. En Netlify: **Add new site → Import from Git** → elige este repo.
+3. Build: lo define `netlify.toml` (`prisma generate` + `next build` + plugin Next.js).
+4. Configura en Netlify → **Site settings → Environment variables** las mismas claves de `.env.example`:
+   - `DATABASE_URL`, `DIRECT_URL`
+   - `NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_STORAGE_BUCKET`
+   - `RESEND_API_KEY`, `EMAIL_FROM`
+   - `NEXTAUTH_SECRET`, `NEXTAUTH_URL` (usa la URL pública de Netlify)
+5. Tras el primer deploy, actualiza `NEXTAUTH_URL` si la URL del sitio cambió.
