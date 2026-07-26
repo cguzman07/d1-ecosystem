@@ -73,7 +73,7 @@ export default async function FlightBoardPage({
         <div className="relative flex flex-wrap items-end justify-between gap-4">
           <div className="max-w-2xl">
             <p className="board-header mb-2">Operaciones · Vista ejecutiva</p>
-            <h1 className="font-display text-3xl font-bold tracking-[-0.03em] text-foreground sm:text-4xl">
+            <h1 className="font-display text-2xl font-bold tracking-[-0.03em] text-foreground sm:text-4xl">
               Tablero de casos
             </h1>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground sm:text-base">
