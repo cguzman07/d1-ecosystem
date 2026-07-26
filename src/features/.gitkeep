@@ -1,0 +1,2 @@
+# Feature modules live here (orders, booking, shipment, customs, costing, documents, master-data, reports).
+# Each module owns its server actions, domain logic, and UI pieces.

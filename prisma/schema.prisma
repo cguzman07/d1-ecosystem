@@ -1,0 +1,526 @@
+// =============================================================================
+// D1 Ecosystem — Prisma Schema
+// Import Management Platform
+// Field names in English; Spanish labels live in the UI layer.
+// =============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  /// Transaction pooler (port 6543) — runtime queries via Prisma
+  url       = env("DATABASE_URL")
+  /// Session pooler / direct (port 5432) — migrations & introspection
+  directUrl = env("DIRECT_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Enums
+// ---------------------------------------------------------------------------
+
+enum Role {
+  internal_specialist
+  admin
+  freight_forwarder
+  customs_agency
+  supplier
+}
+
+enum OrderStatus {
+  created
+  booking_pending
+  booked
+  shipped
+  customs_in_process
+  customs_cleared
+  costed
+  closed
+}
+
+enum SupplierType {
+  international
+  national
+}
+
+enum BookingStatus {
+  no_booking
+  with_booking
+  shipped
+}
+
+enum DocumentChecklistStatus {
+  pending
+  submitted
+  needs_correction
+  approved
+}
+
+enum DocumentCategory {
+  shipment
+  customs
+  costing
+  general
+}
+
+enum DocumentStatus {
+  active
+  superseded
+}
+
+enum InspectionStatus {
+  not_required
+  pending
+  in_process
+  completed
+}
+
+enum NotificationChannel {
+  in_app
+  email
+}
+
+enum NotificationType {
+  order_created
+  order_assigned
+  booking_created
+  booking_updated
+  document_submitted
+  document_needs_correction
+  document_approved
+  customs_updated
+  customs_cleared
+  costing_completed
+  order_closed
+  order_stale
+  system
+}
+
+// ---------------------------------------------------------------------------
+// Auth & Users
+// ---------------------------------------------------------------------------
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  role         Role
+  active       Boolean  @default(true)
+  /// Company/organization name for external actors (forwarders, agencies, suppliers)
+  companyName  String?  @map("company_name")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  freightForwarderProfile FreightForwarderProfile?
+  customsAgencyProfile    CustomsAgencyProfile?
+  supplierProfile         Supplier?                 @relation("SupplierUser")
+
+  ordersCreated          Order[]              @relation("OrderCreatedBy")
+  ordersAsForwarder      Order[]              @relation("OrderForwarder")
+  ordersAsCustomsAgency  Order[]              @relation("OrderCustomsAgency")
+  statusChanges          OrderStatusHistory[]
+  bookingRevisions       BookingRevision[]
+  documentsUploaded      Document[]
+  customsRecords         CustomsRecord[]
+  costingsCalculated     CostingRecord[]
+  notifications          Notification[]
+  shipmentDocUpdates     ShipmentRequiredDocument[] @relation("ShipmentDocUpdatedBy")
+
+  @@index([role])
+  @@index([active])
+  @@map("users")
+}
+
+// ---------------------------------------------------------------------------
+// Master Data
+// ---------------------------------------------------------------------------
+
+model Supplier {
+  id                   String       @id @default(cuid())
+  name                 String
+  type                 SupplierType
+  country              String
+  contactName          String?      @map("contact_name")
+  contactEmail         String?      @map("contact_email")
+  contactPhone         String?      @map("contact_phone")
+  averageLeadTimeDays  Int?         @map("average_lead_time_days")
+  /// Structured sanitary registration info (nullable)
+  sanitaryRegistration Json?        @map("sanitary_registration")
+  active               Boolean      @default(true)
+  /// Extensible free-form metadata — avoids migrations for every new attribute
+  metadata             Json?
+  /// Optional link to a User with role `supplier` for portal access
+  userId               String?      @unique @map("user_id")
+  createdAt            DateTime     @default(now()) @map("created_at")
+  updatedAt            DateTime     @updatedAt @map("updated_at")
+
+  user   User?   @relation("SupplierUser", fields: [userId], references: [id])
+  orders Order[]
+
+  @@index([type])
+  @@index([active])
+  @@index([country])
+  @@map("suppliers")
+}
+
+model FreightForwarderProfile {
+  id            String   @id @default(cuid())
+  userId        String   @unique @map("user_id")
+  companyName   String   @map("company_name")
+  /// Ports / regions covered (e.g. ["Callao", "Buenaventura"])
+  serviceRegions String[] @map("service_regions")
+  contactEmail  String?  @map("contact_email")
+  contactPhone  String?  @map("contact_phone")
+  notes         String?
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("freight_forwarder_profiles")
+}
+
+model CustomsAgencyProfile {
+  id            String   @id @default(cuid())
+  userId        String   @unique @map("user_id")
+  companyName   String   @map("company_name")
+  /// Ports / regions covered
+  serviceRegions String[] @map("service_regions")
+  contactEmail  String?  @map("contact_email")
+  contactPhone  String?  @map("contact_phone")
+  notes         String?
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("customs_agency_profiles")
+}
+
+/// International transit times / routes used for ETA estimates across modules
+model TransitTime {
+  id              String   @id @default(cuid())
+  originCountry   String   @map("origin_country")
+  originPort      String?  @map("origin_port")
+  destinationPort String   @map("destination_port")
+  transitDays     Int      @map("transit_days")
+  carrier         String?
+  notes           String?
+  active          Boolean  @default(true)
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@index([originCountry, destinationPort])
+  @@map("transit_times")
+}
+
+// ---------------------------------------------------------------------------
+// Core: Order (Purchase Order) — central entity
+// ---------------------------------------------------------------------------
+
+model Order {
+  id                 String      @id @default(cuid())
+  orderNumber        String      @unique @map("order_number")
+  /// Link to SAP order for future sync (nullable until integrated)
+  sapReference       String?     @map("sap_reference")
+  supplierId         String      @map("supplier_id")
+  status             OrderStatus @default(created)
+  freightForwarderId String?     @map("freight_forwarder_id")
+  customsAgencyId    String?     @map("customs_agency_id")
+  notes              String?
+  createdById        String      @map("created_by_id")
+  /// Last meaningful activity — used for stale-order alerts
+  lastActivityAt     DateTime    @default(now()) @map("last_activity_at")
+  createdAt          DateTime    @default(now()) @map("created_at")
+  updatedAt          DateTime    @updatedAt @map("updated_at")
+
+  supplier         Supplier @relation(fields: [supplierId], references: [id])
+  freightForwarder User?    @relation("OrderForwarder", fields: [freightForwarderId], references: [id])
+  customsAgency    User?    @relation("OrderCustomsAgency", fields: [customsAgencyId], references: [id])
+  createdBy        User     @relation("OrderCreatedBy", fields: [createdById], references: [id])
+
+  statusHistory OrderStatusHistory[]
+  booking       Booking?
+  shipment      ShipmentRecord?
+  customs       CustomsRecord?
+  costing       CostingRecord?
+  documents     Document[]
+  notifications Notification[]
+
+  @@index([status])
+  @@index([supplierId])
+  @@index([freightForwarderId])
+  @@index([customsAgencyId])
+  @@index([createdAt])
+  @@index([lastActivityAt])
+  @@index([sapReference])
+  @@map("orders")
+}
+
+model OrderStatusHistory {
+  id             String       @id @default(cuid())
+  orderId        String       @map("order_id")
+  previousStatus OrderStatus? @map("previous_status")
+  newStatus      OrderStatus  @map("new_status")
+  changedById    String       @map("changed_by_id")
+  note           String?
+  createdAt      DateTime     @default(now()) @map("created_at")
+
+  order     Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  changedBy User  @relation(fields: [changedById], references: [id])
+
+  @@index([orderId])
+  @@index([createdAt])
+  @@map("order_status_history")
+}
+
+// ---------------------------------------------------------------------------
+// Booking
+// ---------------------------------------------------------------------------
+
+model Booking {
+  id              String        @id @default(cuid())
+  orderId         String        @unique @map("order_id")
+  /// SARPE — current departure date
+  departureDate   DateTime?     @map("departure_date")
+  arrivalDate     DateTime?     @map("arrival_date")
+  containerNumbers String[]     @map("container_numbers")
+  carrier         String?
+  status          BookingStatus @default(no_booking)
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+
+  order     Order             @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  revisions BookingRevision[]
+
+  @@index([status])
+  @@index([departureDate])
+  @@index([arrivalDate])
+  @@map("bookings")
+}
+
+/// Every field change creates a revision row — full "roleo" audit trail
+model BookingRevision {
+  id            String   @id @default(cuid())
+  bookingId     String   @map("booking_id")
+  fieldName     String   @map("field_name")
+  oldValue      String?  @map("old_value")
+  newValue      String?  @map("new_value")
+  changedById   String   @map("changed_by_id")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  changedBy User    @relation(fields: [changedById], references: [id])
+
+  @@index([bookingId])
+  @@index([createdAt])
+  @@map("booking_revisions")
+}
+
+// ---------------------------------------------------------------------------
+// Embarque (Shipment) + Document checklist
+// ---------------------------------------------------------------------------
+
+model ShipmentRecord {
+  id        String   @id @default(cuid())
+  orderId   String   @unique @map("order_id")
+  notes     String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  order             Order                      @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  requiredDocuments ShipmentRequiredDocument[]
+
+  @@map("shipment_records")
+}
+
+model ShipmentRequiredDocument {
+  id               String                   @id @default(cuid())
+  shipmentId       String                   @map("shipment_id")
+  /// e.g. "Factura comercial", "Packing list", "BL / AWB"
+  documentType     String                   @map("document_type")
+  status           DocumentChecklistStatus  @default(pending)
+  correctionReason String?                  @map("correction_reason")
+  supplierNotified Boolean                  @default(false) @map("supplier_notified")
+  /// Optional link to the uploaded Document row when submitted
+  documentId       String?                  @map("document_id")
+  updatedById      String?                  @map("updated_by_id")
+  createdAt        DateTime                 @default(now()) @map("created_at")
+  updatedAt        DateTime                 @updatedAt @map("updated_at")
+
+  shipment  ShipmentRecord @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+  document  Document?      @relation(fields: [documentId], references: [id])
+  updatedBy User?          @relation("ShipmentDocUpdatedBy", fields: [updatedById], references: [id])
+
+  @@index([shipmentId])
+  @@index([status])
+  @@map("shipment_required_documents")
+}
+
+// ---------------------------------------------------------------------------
+// Documentación (central document repository)
+// ---------------------------------------------------------------------------
+
+model Document {
+  id           String           @id @default(cuid())
+  orderId      String           @map("order_id")
+  category     DocumentCategory
+  /// Original filename for display
+  fileName     String           @map("file_name")
+  /// MIME type
+  contentType  String           @map("content_type")
+  /// S3/MinIO object key — never local disk paths
+  storageKey   String           @map("storage_key")
+  fileSizeBytes Int             @map("file_size_bytes")
+  version      Int              @default(1)
+  status       DocumentStatus   @default(active)
+  /// Groups versions of the same logical document
+  documentGroupId String?       @map("document_group_id")
+  uploadedById String           @map("uploaded_by_id")
+  uploadedAt   DateTime         @default(now()) @map("uploaded_at")
+
+  order                   Order                       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  uploadedBy              User                        @relation(fields: [uploadedById], references: [id])
+  shipmentRequiredDocs    ShipmentRequiredDocument[]
+
+  @@index([orderId])
+  @@index([category])
+  @@index([status])
+  @@index([documentGroupId])
+  @@index([uploadedAt])
+  @@map("documents")
+}
+
+// ---------------------------------------------------------------------------
+// Aduana (Customs)
+// ---------------------------------------------------------------------------
+
+model CustomsRecord {
+  id                      String           @id @default(cuid())
+  orderId                 String           @unique @map("order_id")
+  customsAgencyId         String           @map("customs_agency_id")
+  declarationNumber       String?          @map("declaration_number")
+  presentationDate        DateTime?        @map("presentation_date")
+  /// "Levante" — customs release date
+  releaseDate             DateTime?        @map("release_date")
+  inspectionStatus        InspectionStatus @default(not_required) @map("inspection_status")
+  inspectionCompletedAt   DateTime?        @map("inspection_completed_at")
+  notes                   String?
+  createdAt               DateTime         @default(now()) @map("created_at")
+  updatedAt               DateTime         @updatedAt @map("updated_at")
+
+  order         Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  customsAgency User  @relation(fields: [customsAgencyId], references: [id])
+
+  @@index([customsAgencyId])
+  @@index([inspectionStatus])
+  @@index([presentationDate])
+  @@map("customs_records")
+}
+
+// ---------------------------------------------------------------------------
+// Costeo (Costing / landed cost)
+// ---------------------------------------------------------------------------
+
+model CostingRecord {
+  id               String    @id @default(cuid())
+  orderId          String    @unique @map("order_id")
+  freightCost      Decimal   @default(0) @map("freight_cost") @db.Decimal(14, 2)
+  customsFees      Decimal   @default(0) @map("customs_fees") @db.Decimal(14, 2)
+  supplierGoodsCost Decimal  @default(0) @map("supplier_goods_cost") @db.Decimal(14, 2)
+  otherCosts       Decimal   @default(0) @map("other_costs") @db.Decimal(14, 2)
+  totalLandedCost  Decimal   @default(0) @map("total_landed_cost") @db.Decimal(14, 2)
+  currency         String    @default("USD")
+  calculatedAt     DateTime? @map("calculated_at")
+  calculatedById   String?   @map("calculated_by_id")
+  closed           Boolean   @default(false)
+  notes            String?
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  order        Order             @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  calculatedBy User?             @relation(fields: [calculatedById], references: [id])
+  lineItems    CostingLineItem[]
+
+  @@index([calculatedAt])
+  @@index([closed])
+  @@map("costing_records")
+}
+
+model CostingLineItem {
+  id         String   @id @default(cuid())
+  costingId  String   @map("costing_id")
+  category   String
+  description String
+  amount     Decimal  @db.Decimal(14, 2)
+  currency   String   @default("USD")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  costing CostingRecord @relation(fields: [costingId], references: [id], onDelete: Cascade)
+
+  @@index([costingId])
+  @@map("costing_line_items")
+}
+
+// ---------------------------------------------------------------------------
+// Notifications
+// ---------------------------------------------------------------------------
+
+model Notification {
+  id          String              @id @default(cuid())
+  recipientId String              @map("recipient_id")
+  orderId     String?             @map("order_id")
+  type        NotificationType
+  channel     NotificationChannel
+  title       String
+  message     String
+  payload     Json?
+  read        Boolean             @default(false)
+  sentAt      DateTime            @default(now()) @map("sent_at")
+
+  recipient User   @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+  order     Order? @relation(fields: [orderId], references: [id], onDelete: SetNull)
+
+  @@index([recipientId, read])
+  @@index([orderId])
+  @@index([sentAt])
+  @@index([type])
+  @@map("notifications")
+}
+
+// ---------------------------------------------------------------------------
+// Reporting — pre-aggregated KPI snapshots
+// ---------------------------------------------------------------------------
+
+model ReportSnapshot {
+  id                     String   @id @default(cuid())
+  snapshotDate           DateTime @unique @map("snapshot_date") @db.Date
+  ordersByStatus         Json     @map("orders_by_status")
+  averageCycleTimeDays   Json     @map("average_cycle_time_days")
+  supplierComplianceRate Json     @map("supplier_compliance_rate")
+  bookingPendingCount    Int      @default(0) @map("booking_pending_count")
+  bookingCompletedCount  Int      @default(0) @map("booking_completed_count")
+  totalLandedCostPeriod  Decimal  @default(0) @map("total_landed_cost_period") @db.Decimal(16, 2)
+  metadata               Json?
+  createdAt              DateTime @default(now()) @map("created_at")
+
+  @@index([snapshotDate])
+  @@map("report_snapshots")
+}
+
+// ---------------------------------------------------------------------------
+// App settings (e.g. stale-order threshold in days)
+// ---------------------------------------------------------------------------
+
+model AppSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     Json
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("app_settings")
+}

@@ -1,0 +1,30 @@
+# Local infra (Postgres / MinIO / Mailhog) removed — use Supabase + Resend.
+# Preferred local workflow: npm install && npx prisma db push && npm run db:seed && npm run dev
+#
+# Optional: build/run the Next.js app in Docker against cloud services
+# (requires a filled .env with Supabase + Resend credentials).
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: d1-app
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      NEXTAUTH_URL: http://localhost:3000
+      WATCHPACK_POLLING: "true"
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    command: >
+      sh -c "npx prisma generate &&
+             npx prisma db push &&
+             npm run db:seed &&
+             npm run dev"
