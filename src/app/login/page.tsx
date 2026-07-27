@@ -81,12 +81,12 @@ export default function LoginPage() {
         <div className="board-panel p-6 sm:p-8">
           <div className="mb-6 flex flex-col items-center text-center">
             <Image
-              src="/d1-logo.png"
-              alt="D1 Ecosystem"
-              width={60}
-              height={60}
+              src="/aura-logo.png"
+              alt="AURA Logistics Doc Tracker"
+              width={140}
+              height={140}
               priority
-              className="h-[60px] w-[60px] rounded-md object-contain shadow-sm"
+              className="h-[140px] w-[140px] object-contain"
             />
             <p className="mt-3 text-sm text-muted-foreground">Iniciar sesión</p>
           </div>
