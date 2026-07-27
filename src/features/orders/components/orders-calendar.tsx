@@ -25,7 +25,8 @@ type Props = {
 };
 
 const VISIBLE_EVENTS_PER_DAY = 2;
-const MOBILE_BREAKPOINT = 768;
+/** lg Tailwind: phones + tablets use agenda nativa (FullCalendar solo en desktop ancho) */
+const MOBILE_BREAKPOINT = 1024;
 
 function toDateKey(value: Date | string): string {
   if (typeof value === "string") return value.slice(0, 10);
@@ -72,15 +73,28 @@ function formatWeekLabel(weekStart: Date): string {
 
 function useIsMobile(): { ready: boolean; isMobile: boolean } {
   const [ready, setReady] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(true);
 
   useEffect(() => {
-    const mq = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
-    const apply = () => setIsMobile(mq.matches);
-    apply();
+    function compute() {
+      const width = window.innerWidth;
+      const narrow = width < MOBILE_BREAKPOINT;
+      const coarse = window.matchMedia("(pointer: coarse)").matches;
+      // Agenda en pantallas < 1024px, o touch en viewports hasta ~1100px (evita “sitio de escritorio” en celular)
+      setIsMobile(narrow || (coarse && width < 1100));
+    }
+
+    compute();
     setReady(true);
-    mq.addEventListener("change", apply);
-    return () => mq.removeEventListener("change", apply);
+    window.addEventListener("resize", compute);
+    window.addEventListener("orientationchange", compute);
+    const mq = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
+    mq.addEventListener("change", compute);
+    return () => {
+      window.removeEventListener("resize", compute);
+      window.removeEventListener("orientationchange", compute);
+      mq.removeEventListener("change", compute);
+    };
   }, []);
 
   return { ready, isMobile };
@@ -424,6 +438,11 @@ export function OrdersCalendar({ events }: Props) {
                 ? "Agenda semanal · toca un caso para abrir su tarjeta"
                 : "Clic en el caso o en el día para ver el detalle"}
           </p>
+          {ready && isMobile ? (
+            <p className="mt-1 inline-flex rounded-full bg-primary/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-primary">
+              Vista móvil activa
+            </p>
+          ) : null}
         </div>
       </div>
 
