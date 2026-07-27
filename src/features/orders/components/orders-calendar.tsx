@@ -324,7 +324,10 @@ function DesktopFullCalendar({
   }, [height]);
 
   return (
-    <div ref={containerRef} className="d1-calendar d1-calendar--desktop w-full p-2 sm:p-3 lg:p-4">
+    <div
+      ref={containerRef as React.RefObject<HTMLDivElement>}
+      className="d1-calendar d1-calendar--desktop w-full p-2 sm:p-3 lg:p-4"
+    >
       <FullCalendar
         ref={calendarRef}
         plugins={[dayGridPlugin, interactionPlugin, listPlugin]}
