@@ -15,10 +15,25 @@ const DEMO_ACCOUNTS = [
   { email: "proveedor@d1.local", role: "Proveedor" },
 ];
 
+/** Only same-origin relative paths — blocks Netlify/localhost leaks in callbackUrl */
+function safeCallbackPath(raw: string | null): string {
+  if (!raw) return "/";
+  try {
+    if (raw.startsWith("/") && !raw.startsWith("//")) return raw;
+    const url = new URL(raw);
+    if (typeof window !== "undefined" && url.origin === window.location.origin) {
+      return `${url.pathname}${url.search}${url.hash}` || "/";
+    }
+  } catch {
+    /* ignore */
+  }
+  return "/";
+}
+
 export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") ?? "/";
+  const callbackUrl = safeCallbackPath(searchParams.get("callbackUrl"));
   const [email, setEmail] = useState("especialista@d1.local");
   const [password, setPassword] = useState("password123");
   const [error, setError] = useState<string | null>(null);
@@ -48,8 +63,8 @@ export default function LoginPage() {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center px-4">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(227,6,19,0.08),_transparent_50%),linear-gradient(180deg,#ffffff_0%,#f4f6f8_100%)]" />
-      <div className="pointer-events-none absolute inset-0 opacity-[0.045] [background-image:linear-gradient(rgba(227,6,19,0.35)_1px,transparent_1px),linear-gradient(90deg,rgba(227,6,19,0.35)_1px,transparent_1px)] [background-size:40px_40px]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(15,39,68,0.07),_transparent_55%),linear-gradient(180deg,#ffffff_0%,#e9eef4_100%)]" />
+      <div className="pointer-events-none absolute inset-0 opacity-[0.04] [background-image:linear-gradient(rgba(15,39,68,0.28)_1px,transparent_1px),linear-gradient(90deg,rgba(15,39,68,0.28)_1px,transparent_1px)] [background-size:40px_40px]" />
 
       <div className="relative z-10 grid w-full max-w-4xl gap-8 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="hidden flex-col justify-center lg:flex">

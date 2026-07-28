@@ -44,7 +44,7 @@ export default async function ReportsPage() {
         </div>
         <div className="board-panel p-4">
           <p className="board-header">Ciclo promedio (creada → cierre)</p>
-          <p className="mt-2 font-mono text-3xl text-amber-700">
+          <p className="mt-2 font-mono text-3xl text-primary">
             {kpis.averageCycleTimeDays !== null
               ? `${kpis.averageCycleTimeDays} d`
               : "—"}

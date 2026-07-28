@@ -66,9 +66,9 @@ export default async function FlightBoardPage({
   return (
     <div className="space-y-5 sm:space-y-6">
       <section className="relative overflow-hidden rounded-2xl border border-white/60 bg-white/80 px-5 py-6 shadow-soft backdrop-blur-xl transition-all duration-300 ease-in-out sm:px-7 sm:py-7">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-[#E30613] via-[#ff4d57] to-[#E30613]" />
-        <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-secondary/35 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-20 right-10 h-36 w-36 rounded-full bg-primary/10 blur-3xl" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-[#0F2744] via-[#1E3A5F] to-[#2F6F6A]" />
+        <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-primary/[0.06] blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-20 right-10 h-36 w-36 rounded-full bg-[rgba(47,111,106,0.08)] blur-3xl" />
 
         <div className="relative flex flex-wrap items-end justify-between gap-4">
           <div className="max-w-2xl">
@@ -95,15 +95,15 @@ export default async function FlightBoardPage({
         </div>
 
         <div className="relative mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
-          <StatChip label="Creadas" value={milestoneCounts.creada} tone="red" />
-          <StatChip label="Zarpes" value={milestoneCounts.zarpe} tone="yellow" />
-          <StatChip label="Arribos" value={milestoneCounts.arribo} tone="yellow" />
-          <StatChip label="Levantes" value={milestoneCounts.levante} tone="green" />
+          <StatChip label="Creadas" value={milestoneCounts.creada} tone="slate" />
+          <StatChip label="Zarpes" value={milestoneCounts.zarpe} tone="navy" />
+          <StatChip label="Arribos" value={milestoneCounts.arribo} tone="navy" />
+          <StatChip label="Levantes" value={milestoneCounts.levante} tone="teal" />
         </div>
       </section>
 
       {searchParams.error === "forbidden" && (
-        <div className="rounded-xl border border-secondary bg-secondary/40 px-4 py-3 text-sm text-amber-900">
+        <div className="rounded-xl border border-border bg-muted/80 px-4 py-3 text-sm text-foreground">
           No tienes permiso para acceder a esa sección.
         </div>
       )}
@@ -120,12 +120,12 @@ function StatChip({
 }: {
   label: string;
   value: number;
-  tone: "red" | "yellow" | "green";
+  tone: "slate" | "navy" | "teal";
 }) {
   const tones = {
-    red: "border-primary/20 bg-primary/[0.06] text-primary",
-    yellow: "border-secondary/60 bg-secondary/30 text-foreground",
-    green: "border-emerald-200 bg-emerald-50 text-emerald-700",
+    slate: "border-slate-200 bg-slate-50 text-slate-700",
+    navy: "border-primary/15 bg-primary/[0.05] text-primary",
+    teal: "border-[rgba(47,111,106,0.25)] bg-[rgba(47,111,106,0.08)] text-[#245E5A]",
   };
   return (
     <div

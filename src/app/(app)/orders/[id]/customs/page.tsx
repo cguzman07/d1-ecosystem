@@ -79,7 +79,7 @@ export default async function OrderCustomsPage({ params }: Props) {
       )}
 
       {!ready && !cleared && (
-        <div className="rounded-md border border-secondary bg-secondary/40 px-4 py-3 text-sm text-amber-900">
+        <div className="rounded-md border border-border bg-muted/80 px-4 py-3 text-sm text-foreground">
           En espera de fase anterior — el caso debe estar embarcado (`shipped`) para registrar
           aduana o levante.
         </div>

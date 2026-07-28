@@ -44,21 +44,21 @@ type Props = {
 function StatusIcon({ status }: { status: string }) {
   if (status === "approved") {
     return (
-      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-white shadow-soft">
+      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[rgba(47,111,106,0.9)] text-white shadow-soft">
         <Check className="h-4 w-4" strokeWidth={2.5} />
       </span>
     );
   }
   if (status === "needs_correction") {
     return (
-      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-50 text-[#E30613] ring-1 ring-[#E30613]/25">
+      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary ring-1 ring-primary/25">
         <AlertCircle className="h-4 w-4" />
       </span>
     );
   }
   if (status === "submitted") {
     return (
-      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-700">
+      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-600">
         <Circle className="h-3.5 w-3.5 fill-current" />
       </span>
     );
@@ -168,7 +168,7 @@ export function ShipmentChecklist({
                   </p>
                 )}
                 {item.correctionReason && (
-                  <p className="mt-1 text-xs text-amber-800">
+                  <p className="mt-1 text-xs text-muted-foreground">
                     Motivo: {item.correctionReason}
                   </p>
                 )}

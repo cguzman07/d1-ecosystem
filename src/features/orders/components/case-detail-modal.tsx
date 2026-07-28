@@ -50,7 +50,7 @@ const DOC_STATUS: Record<
   },
   [DocumentChecklistStatus.approved]: {
     label: "Listo",
-    className: "bg-emerald-100 text-emerald-800",
+    className: "bg-[rgba(47,111,106,0.14)] text-[#245E5A]",
   },
 };
 
@@ -59,11 +59,11 @@ function ChecklistRow({ done, label }: { done: boolean; label: string }) {
     <li
       className={cn(
         "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors",
-        done ? "bg-emerald-50" : "bg-muted/50",
+        done ? "bg-[rgba(47,111,106,0.08)]" : "bg-muted/50",
       )}
     >
       {done ? (
-        <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" aria-hidden />
+        <CheckCircle2 className="h-4 w-4 shrink-0 text-[#2F6F6A]" aria-hidden />
       ) : (
         <Circle className="h-4 w-4 shrink-0 text-muted-foreground/70" aria-hidden />
       )}
@@ -73,7 +73,9 @@ function ChecklistRow({ done, label }: { done: boolean; label: string }) {
       <span
         className={cn(
           "ml-auto rounded-full px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider",
-          done ? "bg-emerald-100 text-emerald-800" : "bg-background text-muted-foreground",
+          done
+            ? "bg-[rgba(47,111,106,0.14)] text-[#245E5A]"
+            : "bg-background text-muted-foreground",
         )}
       >
         {done ? "Listo" : "Falta"}
@@ -94,8 +96,8 @@ export function CaseDetailModal({ event, open, onOpenChange }: Props) {
       <DialogContent className="max-h-[min(92vh,720px)] gap-0 overflow-hidden sm:max-w-lg">
         {props && (
           <>
-            <div className="relative overflow-hidden border-b border-border bg-gradient-to-br from-primary/[0.08] via-card to-secondary/30 px-6 pb-5 pt-6">
-              <div className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full bg-secondary/50 blur-2xl" />
+            <div className="relative overflow-hidden border-b border-border bg-gradient-to-br from-primary/[0.05] via-card to-muted/40 px-6 pb-5 pt-6">
+              <div className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full bg-primary/[0.06] blur-2xl" />
               <DialogHeader className="relative space-y-3">
                 <div className="flex flex-wrap items-center gap-2 pr-8">
                   <p className="board-header">Caso</p>
@@ -179,7 +181,7 @@ export function CaseDetailModal({ event, open, onOpenChange }: Props) {
                         >
                           {done ? (
                             <CheckCircle2
-                              className="h-3.5 w-3.5 shrink-0 text-emerald-600"
+                              className="h-3.5 w-3.5 shrink-0 text-[#2F6F6A]"
                               aria-hidden
                             />
                           ) : (

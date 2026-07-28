@@ -45,7 +45,7 @@ export function BookingRevisionHistory({ revisions }: { revisions: Revision[] })
             <p className="font-mono text-xs text-foreground/80">
               <span className="text-muted-foreground">{formatRevisionValue(rev.fieldName, rev.oldValue)}</span>
               {" → "}
-              <span className="text-amber-800">
+              <span className="text-foreground">
                 {formatRevisionValue(rev.fieldName, rev.newValue)}
               </span>
             </p>

@@ -38,7 +38,7 @@ export default async function CustomsDashboardPage({
   return (
     <div className="space-y-6">
       {searchParams.error === "forbidden" && (
-        <div className="rounded-xl border border-secondary bg-secondary/40 px-4 py-3 text-sm text-amber-900">
+        <div className="rounded-xl border border-border bg-muted/80 px-4 py-3 text-sm text-foreground">
           No tienes permiso para acceder a esa sección.
         </div>
       )}

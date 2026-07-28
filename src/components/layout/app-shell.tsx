@@ -62,9 +62,8 @@ export function AppShell({ children, user, unreadCount = 0 }: AppShellProps) {
   return (
     <div className="relative min-h-screen">
       {/* Soft pastel atmosphere (Apple-like depth) */}
-      <div className="pointer-events-none fixed inset-0 -z-10 bg-gradient-to-br from-[#f8fafc] via-[#eef2f7] to-[#f1f5f9]" />
-      <div className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(ellipse_80%_60%_at_10%_20%,rgba(147,197,253,0.35),transparent_55%),radial-gradient(ellipse_70%_50%_at_90%_15%,rgba(253,186,116,0.28),transparent_50%),radial-gradient(ellipse_60%_45%_at_70%_85%,rgba(255,242,0,0.18),transparent_45%),radial-gradient(ellipse_50%_40%_at_20%_90%,rgba(227,6,19,0.08),transparent_40%)]" />
-      <div className="pointer-events-none fixed inset-0 -z-10 backdrop-blur-[2px]" />
+      <div className="pointer-events-none fixed inset-0 -z-10 bg-gradient-to-br from-[#f7f9fb] via-[#e9eef4] to-[#f3f5f7]" />
+      <div className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(ellipse_70%_50%_at_0%_0%,rgba(15,39,68,0.06),transparent_55%),radial-gradient(ellipse_55%_45%_at_100%_100%,rgba(47,111,106,0.07),transparent_50%)]" />
 
       <div className="mx-auto flex min-h-screen max-w-[1600px]">
         {/* Desktop frosted sidebar */}

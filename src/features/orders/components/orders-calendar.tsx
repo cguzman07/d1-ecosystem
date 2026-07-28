@@ -231,13 +231,13 @@ function MobileCasesAgenda({
               key={key}
               className={cn(
                 "overflow-hidden rounded-2xl border bg-white shadow-[0_6px_20px_rgba(15,23,42,0.07)]",
-                isToday ? "border-[#E30613]/35 ring-1 ring-[#E30613]/15" : "border-slate-200/90",
+                isToday ? "border-primary/30 ring-1 ring-primary/15" : "border-slate-200/90",
               )}
             >
               <header
                 className={cn(
                   "flex items-center justify-between px-3.5 py-2.5",
-                  isToday ? "bg-gradient-to-r from-secondary/40 to-white" : "bg-slate-50",
+                  isToday ? "bg-gradient-to-r from-primary/[0.06] to-white" : "bg-slate-50",
                 )}
               >
                 <p className="font-display text-sm font-semibold capitalize tracking-tight text-foreground">
@@ -429,7 +429,7 @@ export function OrdersCalendar({ events }: Props) {
 
   return (
     <div className="overflow-hidden rounded-3xl border border-slate-200/80 bg-gradient-to-b from-slate-100/90 via-slate-50 to-slate-100/80 shadow-[0_12px_40px_rgba(15,23,42,0.08)] backdrop-blur-xl transition-all duration-300 ease-in-out">
-      <div className="border-b border-slate-200/70 bg-gradient-to-r from-white via-white to-secondary/25 px-4 py-3.5 sm:px-5">
+      <div className="border-b border-slate-200/70 bg-gradient-to-r from-white via-white to-primary/[0.04] px-4 py-3.5 sm:px-5">
         <div>
           <p className="font-display text-base font-semibold tracking-[-0.02em] text-foreground sm:text-lg">
             Calendario de casos

@@ -128,7 +128,7 @@ export function BookingForm({ orderId, initial, readOnly }: Props) {
       </div>
 
       {readOnly && (
-        <p className="rounded-md border border-secondary bg-secondary/40 px-3 py-2 text-sm text-amber-900">
+        <p className="rounded-md border border-border bg-muted/80 px-3 py-2 text-sm text-foreground">
           En espera de fase anterior — los documentos de embarque deben estar aprobados.
         </p>
       )}

@@ -48,7 +48,7 @@ export function DayAgendaModal({
       <DialogContent className="gap-0 overflow-hidden p-0 sm:max-w-lg">
         {dateIso && (
           <>
-            <div className="border-b border-border bg-gradient-to-br from-primary/[0.07] via-card to-secondary/25 px-6 pb-4 pt-6">
+            <div className="border-b border-border bg-gradient-to-br from-primary/[0.05] via-card to-muted/40 px-6 pb-4 pt-6">
               <DialogHeader className="space-y-1.5 pr-6">
                 <DialogTitle className="font-display text-xl font-bold capitalize tracking-tight">
                   {formatDayTitle(dateIso)}

@@ -45,7 +45,7 @@ export function OrdersByStatusChart({ data }: { data: OrdersByStatusPoint[] }) {
             formatter={(value: number) => [value, "Órdenes"]}
             labelFormatter={(label) => String(label)}
           />
-          <Bar dataKey="count" name="Órdenes" fill="#E30613" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="count" name="Órdenes" fill="#0F2744" radius={[4, 4, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>
@@ -86,9 +86,9 @@ export function LandedCostByMonthChart({
             type="monotone"
             dataKey="total"
             name="Total aterrizado"
-            stroke="#E30613"
+            stroke="#0F2744"
             strokeWidth={2.5}
-            dot={{ r: 4, fill: "#FFF200", stroke: "#E30613", strokeWidth: 2 }}
+            dot={{ r: 4, fill: "#2F6F6A", stroke: "#0F2744", strokeWidth: 2 }}
             activeDot={{ r: 6 }}
           />
         </LineChart>
@@ -110,7 +110,7 @@ export function CycleTimeBars({ data }: { data: CycleTimePoint[] }) {
           </div>
           <div className="h-2 overflow-hidden rounded-sm bg-muted">
             <div
-              className="h-full rounded-sm bg-gradient-to-r from-primary to-secondary"
+              className="h-full rounded-sm bg-gradient-to-r from-[#0F2744] to-[#2F6F6A]"
               style={{
                 width: `${Math.min(100, (row.averageDays / 30) * 100)}%`,
               }}

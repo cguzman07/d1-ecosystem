@@ -51,7 +51,7 @@ export default async function OrderCostingPage({ params }: Props) {
       </div>
 
       {!ready && (
-        <div className="board-panel px-4 py-3 text-sm text-amber-800">
+        <div className="board-panel px-4 py-3 text-sm text-foreground">
           La orden aún no está en levante. Completa aduana antes de
           costear.
         </div>

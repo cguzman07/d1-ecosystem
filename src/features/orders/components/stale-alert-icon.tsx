@@ -15,7 +15,7 @@ export function StaleAlertIcon({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 text-amber-600",
+        "inline-flex items-center gap-1 text-primary",
         className,
       )}
       title="Sin avance en creada / booking pendiente por más de 3 días"

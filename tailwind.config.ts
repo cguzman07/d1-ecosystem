@@ -52,9 +52,11 @@ const config: Config = {
           ok: "hsl(var(--board-ok))",
           warn: "hsl(var(--board-warn))",
         },
-        d1: {
-          red: "#E30613",
-          yellow: "#FFF200",
+        aura: {
+          navy: "#0F2744",
+          mid: "#1E3A5F",
+          teal: "#2F6F6A",
+          mist: "#E9EEF4",
           white: "#FFFFFF",
         },
       },
@@ -71,7 +73,7 @@ const config: Config = {
       boxShadow: {
         soft: "0 8px 30px rgb(0,0,0,0.04)",
         lift: "0 12px 40px rgba(15, 23, 42, 0.08)",
-        glow: "0 0 0 4px rgba(227, 6, 19, 0.12), 0 8px 24px rgba(227, 6, 19, 0.1)",
+        glow: "0 0 0 4px rgba(15, 39, 68, 0.10), 0 8px 24px rgba(15, 39, 68, 0.08)",
       },
       keyframes: {
         "board-pulse": {

@@ -105,8 +105,8 @@ export function DocumentUploadForm({
           "rounded-xl border border-dashed text-center transition-all duration-300 ease-in-out",
           compact ? "px-3 py-4" : "px-4 py-6",
           dragOver
-            ? "border-[#E30613] bg-red-50 text-[#E30613]"
-            : "border-gray-300 bg-white/50 text-muted-foreground hover:border-[#E30613] hover:text-[#E30613]",
+            ? "border-primary bg-primary/5 text-primary"
+            : "border-gray-300 bg-white/50 text-muted-foreground hover:border-primary/50 hover:text-primary",
         )}
         onDragOver={(e) => {
           e.preventDefault();

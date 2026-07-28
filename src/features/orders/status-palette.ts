@@ -1,6 +1,6 @@
 import { OrderStatus } from "@prisma/client";
 
-/** D1 status palette — 8 distinct colors for calendar / Gantt / legend */
+/** AURA status palette — navy/teal scale (executive, low chroma) */
 export type StatusSwatch = {
   backgroundColor: string;
   borderColor: string;
@@ -10,50 +10,50 @@ export type StatusSwatch = {
 
 export const ORDER_STATUS_PALETTE: Record<OrderStatus, StatusSwatch> = {
   [OrderStatus.created]: {
-    backgroundColor: "#E30613",
-    borderColor: "#C10510",
+    backgroundColor: "#94A3B8",
+    borderColor: "#64748B",
     textColor: "#FFFFFF",
     className: "fc-event-status-created",
   },
   [OrderStatus.booking_pending]: {
-    backgroundColor: "#EA580C",
-    borderColor: "#C2410C",
+    backgroundColor: "#64748B",
+    borderColor: "#475569",
     textColor: "#FFFFFF",
     className: "fc-event-status-booking_pending",
   },
   [OrderStatus.booked]: {
-    backgroundColor: "#FFF200",
-    borderColor: "#E6DB00",
-    textColor: "#0A0A0A",
+    backgroundColor: "#3D5A80",
+    borderColor: "#2E4666",
+    textColor: "#FFFFFF",
     className: "fc-event-status-booked",
   },
   [OrderStatus.shipped]: {
-    backgroundColor: "#2563EB",
-    borderColor: "#1D4ED8",
+    backgroundColor: "#1E3A5F",
+    borderColor: "#162C48",
     textColor: "#FFFFFF",
     className: "fc-event-status-shipped",
   },
   [OrderStatus.customs_in_process]: {
-    backgroundColor: "#7C3AED",
-    borderColor: "#6D28D9",
+    backgroundColor: "#0F2744",
+    borderColor: "#0A1C30",
     textColor: "#FFFFFF",
     className: "fc-event-status-customs_in_process",
   },
   [OrderStatus.customs_cleared]: {
-    backgroundColor: "#16A34A",
-    borderColor: "#15803D",
+    backgroundColor: "#2F6F6A",
+    borderColor: "#245E5A",
     textColor: "#FFFFFF",
     className: "fc-event-status-customs_cleared",
   },
   [OrderStatus.costed]: {
-    backgroundColor: "#0D9488",
-    borderColor: "#0F766E",
+    backgroundColor: "#245E5A",
+    borderColor: "#1B4A47",
     textColor: "#FFFFFF",
     className: "fc-event-status-costed",
   },
   [OrderStatus.closed]: {
-    backgroundColor: "#4B5563",
-    borderColor: "#374151",
+    backgroundColor: "#475569",
+    borderColor: "#334155",
     textColor: "#FFFFFF",
     className: "fc-event-status-closed",
   },

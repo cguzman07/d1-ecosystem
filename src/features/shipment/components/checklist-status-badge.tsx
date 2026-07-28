@@ -14,15 +14,15 @@ const PILL: Record<
   },
   submitted: {
     label: "Enviado",
-    className: "bg-amber-50 text-amber-800",
+    className: "bg-slate-100 text-slate-700",
   },
   needs_correction: {
     label: "Revisión",
-    className: "bg-red-50 text-[#E30613]",
+    className: "bg-primary/10 text-primary",
   },
   approved: {
     label: "Aprobado",
-    className: "bg-emerald-50 text-emerald-700",
+    className: "bg-[rgba(47,111,106,0.12)] text-[#245E5A]",
   },
 };
 

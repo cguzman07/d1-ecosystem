@@ -39,7 +39,7 @@ export default async function CostingDashboardPage() {
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="board-panel p-4">
           <p className="board-header">Listas (levante)</p>
-          <p className="mt-2 font-mono text-3xl text-amber-700">{ready}</p>
+          <p className="mt-2 font-mono text-3xl text-primary">{ready}</p>
         </div>
         <div className="board-panel p-4">
           <p className="board-header">Costeadas / cerradas</p>

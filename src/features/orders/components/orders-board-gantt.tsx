@@ -133,7 +133,7 @@ export function OrdersBoardGantt({ rows }: Props) {
 
   return (
     <div className="overflow-hidden rounded-2xl border border-border/80 bg-card shadow-[0_8px_30px_rgba(15,23,42,0.06)]">
-      <div className="border-b border-border/70 bg-gradient-to-r from-white via-white to-secondary/20 px-4 py-3 sm:px-5">
+      <div className="border-b border-border/70 bg-gradient-to-r from-white via-white to-primary/[0.04] px-4 py-3 sm:px-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="font-display text-sm font-semibold text-foreground">
@@ -179,7 +179,7 @@ export function OrdersBoardGantt({ rows }: Props) {
             barCornerRadius={6}
             barFill={60}
             fontSize="12"
-            todayColor="rgba(227, 6, 19, 0.12)"
+            todayColor="rgba(15, 39, 68, 0.08)"
             TooltipContent={({ task, fontSize, fontFamily }) => (
               <div
                 className="rounded-lg border border-border bg-card px-3 py-2 shadow-lg"

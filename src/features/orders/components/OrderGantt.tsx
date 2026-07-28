@@ -26,28 +26,28 @@ type Props = {
 
 const PHASE = {
   booking: {
-    backgroundColor: "#E30613",
-    backgroundSelectedColor: "#C10510",
-    progressColor: "#FF8A90",
-    progressSelectedColor: "#FFB0B5",
+    backgroundColor: "#64748B",
+    backgroundSelectedColor: "#475569",
+    progressColor: "#94A3B8",
+    progressSelectedColor: "#CBD5E1",
   },
   transit: {
-    backgroundColor: "#FFF200",
-    backgroundSelectedColor: "#E6DB00",
-    progressColor: "#C4BC00",
-    progressSelectedColor: "#A89F00",
+    backgroundColor: "#1E3A5F",
+    backgroundSelectedColor: "#162C48",
+    progressColor: "#3D5A80",
+    progressSelectedColor: "#5A7A9E",
   },
   customs: {
-    backgroundColor: "#F59E0B",
-    backgroundSelectedColor: "#D97706",
-    progressColor: "#FCD34D",
-    progressSelectedColor: "#FDE68A",
+    backgroundColor: "#0F2744",
+    backgroundSelectedColor: "#0A1C30",
+    progressColor: "#1E3A5F",
+    progressSelectedColor: "#3D5A80",
   },
   costing: {
-    backgroundColor: "#16A34A",
-    backgroundSelectedColor: "#15803D",
-    progressColor: "#86EFAC",
-    progressSelectedColor: "#BBF7D0",
+    backgroundColor: "#2F6F6A",
+    backgroundSelectedColor: "#245E5A",
+    progressColor: "#4A8F8A",
+    progressSelectedColor: "#6BA8A3",
   },
 } as const;
 
@@ -326,10 +326,10 @@ export function OrderGantt({ dates }: Props) {
           ))}
         </div>
         <ul className="flex flex-wrap gap-2 text-[10px] font-bold uppercase tracking-wide">
-          <LegendDot color="#E30613" label="Booking" />
-          <LegendDot color="#FFF200" text="#0A0A0A" label="Tránsito" />
-          <LegendDot color="#F59E0B" label="Aduana" />
-          <LegendDot color="#16A34A" label="Costeo" />
+          <LegendDot color="#64748B" label="Booking" />
+          <LegendDot color="#1E3A5F" label="Tránsito" />
+          <LegendDot color="#0F2744" label="Aduana" />
+          <LegendDot color="#2F6F6A" label="Costeo" />
         </ul>
       </div>
 
@@ -346,7 +346,7 @@ export function OrderGantt({ dates }: Props) {
             barFill={70}
             fontFamily={DISPLAY_FONT}
             fontSize="13"
-            todayColor="rgba(227, 6, 19, 0.1)"
+            todayColor="rgba(15, 39, 68, 0.08)"
             TooltipContent={SpanishTooltip}
             TaskListHeader={SpanishTaskListHeader}
             TaskListTable={SpanishTaskListTable}

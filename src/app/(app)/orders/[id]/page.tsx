@@ -85,7 +85,7 @@ export default async function OrderDetailPage({ params }: Props) {
     <div className="flex flex-col gap-8">
       {/* Header */}
       <section className="relative overflow-hidden rounded-2xl border border-white/60 bg-white/80 px-5 py-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl sm:px-7">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-[#E30613] via-[#ff4d57] to-[#E30613]" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-[#0F2744] via-[#1E3A5F] to-[#2F6F6A]" />
 
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="min-w-0 max-w-2xl">

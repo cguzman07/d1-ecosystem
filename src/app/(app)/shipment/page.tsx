@@ -49,7 +49,7 @@ export default async function ShipmentDashboardPage({
   return (
     <div className="space-y-6">
       {searchParams.error === "forbidden" && (
-        <div className="rounded-xl border border-secondary bg-secondary/40 px-4 py-3 text-sm text-amber-900">
+        <div className="rounded-xl border border-border bg-muted/80 px-4 py-3 text-sm text-foreground">
           No tienes permiso para acceder a esa sección.
         </div>
       )}
@@ -68,7 +68,7 @@ export default async function ShipmentDashboardPage({
         </div>
         <Link
           href={searchParams.alertOnly === "1" ? "/shipment" : "/shipment?alertOnly=1"}
-          className="inline-flex items-center gap-2 rounded-md border border-secondary bg-secondary/50 px-3 py-2 text-sm text-amber-800 hover:bg-secondary"
+          className="inline-flex items-center gap-2 rounded-md border border-border bg-muted/70 px-3 py-2 text-sm text-foreground hover:bg-muted"
         >
           <AlertTriangle className="h-4 w-4" />
           {searchParams.alertOnly === "1"
@@ -128,7 +128,7 @@ export default async function ShipmentDashboardPage({
                     </td>
                     <td className="px-4 py-3">
                       {row.hasAlert ? (
-                        <span className="inline-flex items-center gap-1 text-amber-600">
+                        <span className="inline-flex items-center gap-1 text-primary">
                           <AlertTriangle className="h-4 w-4 animate-board-pulse" />
                           {row.checklist.needsCorrection > 0
                             ? "Corrección"
