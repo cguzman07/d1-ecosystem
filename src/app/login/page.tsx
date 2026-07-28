@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -80,14 +79,12 @@ export default function LoginPage() {
 
         <div className="board-panel p-6 sm:p-8">
           <div className="mb-6 flex flex-col items-center text-center">
-            <Image
-              src="/aura-logo.png"
-              alt="AURA Logistics Doc Tracker"
-              width={140}
-              height={140}
-              priority
-              className="h-[140px] w-[140px] object-contain"
-            />
+            <p className="font-display text-2xl font-bold tracking-[-0.03em] text-foreground">
+              AURA
+            </p>
+            <p className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
+              Logistics Doc Tracker
+            </p>
             <p className="mt-3 text-sm text-muted-foreground">Iniciar sesión</p>
           </div>
 

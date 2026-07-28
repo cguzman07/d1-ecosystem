@@ -24,11 +24,6 @@ const jetbrains = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "AURA — Logistics Doc Tracker",
   description: "Plataforma de gestión de importaciones",
-  icons: {
-    icon: [{ url: "/aura-logo.png", type: "image/png" }],
-    apple: [{ url: "/aura-logo.png" }],
-    shortcut: ["/aura-logo.png"],
-  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

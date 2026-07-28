@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -75,14 +74,6 @@ export function AppShell({ children, user, unreadCount = 0 }: AppShellProps) {
             className="mb-8 flex items-center gap-2.5 px-2 transition-all duration-300 ease-in-out hover:opacity-90"
             aria-label="AURA Logistics Doc Tracker"
           >
-            <Image
-              src="/aura-logo.png"
-              alt="AURA Logistics Doc Tracker"
-              width={44}
-              height={44}
-              priority
-              className="h-11 w-11 object-contain"
-            />
             <div className="min-w-0">
               <p className="font-display text-sm font-bold tracking-[-0.02em] text-foreground">
                 AURA
@@ -158,15 +149,10 @@ export function AppShell({ children, user, unreadCount = 0 }: AppShellProps) {
         <div className="flex min-w-0 flex-1 flex-col">
           {/* Mobile top bar */}
           <header className="sticky top-0 z-40 flex items-center gap-3 border-b border-gray-200/50 bg-white/70 px-4 py-3 shadow-soft backdrop-blur-xl lg:hidden">
-            <Link href={home} className="shrink-0" aria-label="AURA Logistics Doc Tracker">
-              <Image
-                src="/aura-logo.png"
-                alt="AURA Logistics Doc Tracker"
-                width={36}
-                height={36}
-                priority
-                className="h-9 w-9 object-contain"
-              />
+            <Link href={home} className="min-w-0 shrink-0" aria-label="AURA Logistics Doc Tracker">
+              <p className="font-display text-sm font-bold tracking-tight text-foreground">
+                AURA
+              </p>
             </Link>
             <div className="min-w-0 flex-1">
               <p className="truncate font-display text-sm font-bold tracking-tight">
