@@ -71,11 +71,11 @@ export function AppShell({ children, user, unreadCount = 0 }: AppShellProps) {
           <Link
             href={home}
             className="mb-8 flex items-center gap-2.5 px-2 transition-all duration-300 ease-in-out hover:opacity-90"
-            aria-label="AURA Logistics Doc Tracker"
+            aria-label="D1 Ecosystem — Logistics Doc Tracker"
           >
             <div className="min-w-0">
               <p className="font-display text-sm font-bold tracking-[-0.02em] text-foreground">
-                AURA
+                D1 Ecosystem
               </p>
               <p className="truncate text-[11px] text-muted-foreground">
                 {ROLE_LABELS[user.role]}
@@ -148,9 +148,9 @@ export function AppShell({ children, user, unreadCount = 0 }: AppShellProps) {
         <div className="flex min-w-0 flex-1 flex-col">
           {/* Mobile top bar */}
           <header className="sticky top-0 z-40 flex items-center gap-3 border-b border-gray-200/50 bg-white/70 px-4 py-3 shadow-soft backdrop-blur-xl lg:hidden">
-            <Link href={home} className="min-w-0 shrink-0" aria-label="AURA Logistics Doc Tracker">
+            <Link href={home} className="min-w-0 shrink-0" aria-label="D1 Ecosystem — Logistics Doc Tracker">
               <p className="font-display text-sm font-bold tracking-tight text-foreground">
-                AURA
+                D1 Ecosystem
               </p>
             </Link>
             <div className="min-w-0 flex-1">

@@ -22,7 +22,7 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AURA — Logistics Doc Tracker",
+  title: "D1 Ecosystem — Logistics Doc Tracker",
   description: "Plataforma de gestión de importaciones",
 };
 
