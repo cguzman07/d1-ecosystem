@@ -34,3 +34,32 @@ export function isStaleEarlyStage(
   const thresholdMs = days * 24 * 60 * 60 * 1000;
   return differenceInMilliseconds(new Date(), new Date(anchor)) > thresholdMs;
 }
+
+/**
+ * "Next action" label for the board view — tells you whose turn it is,
+ * derived purely from order status (no extra queries). This is what
+ * turns the board into a real flight-status summary instead of just
+ * a status badge.
+ */
+export function getNextActionLabel(status: OrderStatusValue): string {
+  switch (status) {
+    case "created":
+      return "Especialista: asignar agente y aduana";
+    case "booking_pending":
+      return "Proveedor: cargar documentos de embarque";
+    case "booked":
+      return "Agente de carga: confirmar zarpe";
+    case "shipped":
+      return "Aduana: iniciar trámite de importación";
+    case "customs_in_process":
+      return "Aduana: gestionar levante";
+    case "customs_cleared":
+      return "Especialista: finalizar costeo";
+    case "costed":
+      return "Especialista: cerrar orden";
+    case "closed":
+      return "Completado";
+    default:
+      return "—";
+  }
+}
