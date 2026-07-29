@@ -95,12 +95,8 @@ export default function LoginPage() {
         <div className="board-panel p-6 sm:p-8">
           <div className="mb-6 flex flex-col items-center text-center">
             <p className="font-display text-2xl font-bold tracking-[-0.03em] text-foreground">
-              AURA
+              Iniciar sesión
             </p>
-            <p className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
-              Logistics Doc Tracker
-            </p>
-            <p className="mt-3 text-sm text-muted-foreground">Iniciar sesión</p>
           </div>
 
           <form onSubmit={onSubmit} className="space-y-4">
